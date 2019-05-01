@@ -34,13 +34,11 @@ class MyApp extends StatelessWidget {
             ],
           ),
           floatingActionButton: FloatingActionButton(
+            tooltip: "Add",
+            child: Icon(Icons.add),
             onPressed: () {},
           ),
         ),
-      ),
-      theme: ThemeData(
-        primaryColor: Colors.green,
-        indicatorColor: Colors.white,
       ),
     );
   }

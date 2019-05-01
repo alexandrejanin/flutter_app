@@ -2,34 +2,36 @@ import 'package:flutter/material.dart';
 
 import 'goal.dart';
 import 'task.dart';
+import 'task_list.dart';
 
 // Panel
 
+/// Represents a panel of the app's main screen.
 abstract class Panel extends StatefulWidget {
-  Panel({Key key}) : super(key: key);
+  Panel({key}) : super(key: key);
 
   @override
-  PanelState createState();
+  createState();
 }
 
 abstract class PanelState extends State<Panel>
     with AutomaticKeepAliveClientMixin {
   @override
-  bool get wantKeepAlive => true;
+  get wantKeepAlive => true;
 }
 
 // TasksPanel
 
 class TasksPanel extends Panel {
-  TasksPanel({Key key}) : super(key: key);
+  TasksPanel({key}) : super(key: key);
 
   @override
-  _TasksPanelState createState() => _TasksPanelState();
+  createState() => _TasksPanelState();
 }
 
 class _TasksPanelState extends PanelState {
   @override
-  Widget build(BuildContext context) {
+  build(context) {
     super.build(context);
     return ListView(
       physics: AlwaysScrollableScrollPhysics(
@@ -37,9 +39,9 @@ class _TasksPanelState extends PanelState {
       ),
       children: <Widget>[
         TaskList("Finances", <Task>[
-          Task("Spend less than 40€ on groceries"),
-          Task("No more than 5€ per lunch"),
-          Task("Look into rent-lowering options"),
+          Task("Spend less than 40€ on groceries", ""),
+          Task("No more than 5€ per lunch", ""),
+          Task("Look into rent-lowering options", ""),
         ])
       ],
     );
@@ -49,15 +51,15 @@ class _TasksPanelState extends PanelState {
 // GoalsPanel
 
 class GoalsPanel extends Panel {
-  GoalsPanel({Key key}) : super(key: key);
+  GoalsPanel({key}) : super(key: key);
 
   @override
-  _GoalsPanelState createState() => _GoalsPanelState();
+  createState() => _GoalsPanelState();
 }
 
 class _GoalsPanelState extends PanelState {
   @override
-  Widget build(BuildContext context) {
+  build(context) {
     super.build(context);
     return ListView(
       physics: AlwaysScrollableScrollPhysics(
@@ -75,17 +77,17 @@ class _GoalsPanelState extends PanelState {
 // ProfilePanel
 
 class ProfilePanel extends Panel {
-  ProfilePanel({Key key}) : super(key: key);
+  ProfilePanel({key}) : super(key: key);
 
   @override
-  ProfilePanelState createState() => ProfilePanelState();
+  createState() => ProfilePanelState();
 }
 
 class ProfilePanelState extends PanelState {
   final _username = "KBanana";
 
   @override
-  Widget build(BuildContext context) {
+  build(context) {
     super.build(context);
     return Card(
       margin: const EdgeInsets.all(8),
