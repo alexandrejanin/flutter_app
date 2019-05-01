@@ -18,9 +18,9 @@ class MyApp extends StatelessWidget {
               children: <Widget>[
                 TabBar(
                   tabs: [
-                    TabItem(Icons.check, "Tasks"),
-                    TabItem(Icons.star, "Goals"),
-                    TabItem(Icons.person, "Me"),
+                    TabItem(icon: Icons.check, text: "Tasks"),
+                    TabItem(icon: Icons.star, text: "Goals"),
+                    TabItem(icon: Icons.person, text: "Me"),
                   ],
                 ),
               ],
@@ -45,16 +45,22 @@ class MyApp extends StatelessWidget {
 }
 
 class TabItem extends StatelessWidget {
-  final icon;
-  final text;
+  final IconData _icon;
+  final String _text;
 
-  const TabItem(this.icon, this.text, {Key key}) : super(key: key);
+  const TabItem({IconData icon, String text, Key key})
+      : _icon = icon,
+        _text = text,
+        super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     return Tab(
       child: Column(
-        children: <Widget>[Icon(icon), Text(text)],
+        children: <Widget>[
+          Icon(_icon),
+          Text(_text),
+        ],
       ),
     );
   }

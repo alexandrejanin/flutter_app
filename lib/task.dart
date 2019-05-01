@@ -6,13 +6,15 @@ class Task extends StatefulWidget {
   final String _name;
   final String _notes;
 
-  Task(this._name, this._notes);
+  Task({@required String name, String notes})
+      : _name = name,
+        _notes = notes;
 
   @override
-  createState() => _TaskState();
+  createState() => TaskState();
 }
 
-class _TaskState extends State<Task> {
+class TaskState extends State<Task> {
   bool _done = false;
   String _name;
   String _notes;
@@ -29,32 +31,6 @@ class _TaskState extends State<Task> {
 
   set notes(String notes) => setState(() => _notes = notes);
 
-  Widget _taskText() {
-    final nameText = Text(
-      _name,
-      style: TextStyle(
-        fontSize: 16,
-        decoration: _done ? TextDecoration.lineThrough : TextDecoration.none,
-      ),
-    );
-    return _notes.isEmpty
-        ? nameText
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              nameText,
-              Text(
-                _notes,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black54,
-                ),
-              ),
-            ],
-          );
-  }
-
   @override
   void initState() {
     super.initState();
@@ -63,12 +39,18 @@ class _TaskState extends State<Task> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     return Container(
       height: 50,
       child: InkWell(
-        onLongPress: () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => TaskEditScreen(this))),
+        onLongPress: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TaskEditScreen(
+                      taskState: this,
+                    ),
+              ),
+            ),
         onTap: () => done = !_done,
         child: Row(
           children: <Widget>[
@@ -82,18 +64,49 @@ class _TaskState extends State<Task> {
       ),
     );
   }
+
+  _taskText() {
+    final nameText = Text(
+      _name,
+      style: TextStyle(
+        fontSize: 16,
+        decoration: _done ? TextDecoration.lineThrough : TextDecoration.none,
+      ),
+    );
+
+    if (notes == null || notes.isEmpty) {
+      return nameText;
+    }
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        nameText,
+        Text(
+          _notes,
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.black54,
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class TaskEditScreen extends StatefulWidget {
-  final _TaskState _taskState;
+  final TaskState _taskState;
 
-  const TaskEditScreen(this._taskState, {key}) : super(key: key);
+  const TaskEditScreen({@required TaskState taskState, Key key})
+      : _taskState = taskState,
+        super(key: key);
 
   @override
-  createState() => _TaskEditScreenState();
+  createState() => TaskEditScreenState();
 }
 
-class _TaskEditScreenState extends State<TaskEditScreen> {
+class TaskEditScreenState extends State<TaskEditScreen> {
   final _taskNameController = TextEditingController();
   final _taskNotesController = TextEditingController();
 
@@ -106,7 +119,7 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
     widget._taskState.notes = _taskNotesController.text;
   }
 
-  void _submit(BuildContext context) {
+  void _submit(context) {
     _saveChanges();
     Navigator.pop(context);
   }
@@ -143,7 +156,7 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
