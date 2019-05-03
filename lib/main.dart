@@ -13,8 +13,8 @@ class MyApp extends StatelessWidget {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            title: Column(
-              verticalDirection: VerticalDirection.up,
+            flexibleSpace: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 TabBar(
                   tabs: [

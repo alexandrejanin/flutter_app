@@ -19,11 +19,11 @@ class TaskState extends State<Task> {
   String _name;
   String _notes;
 
-  get done => _done;
+  bool get done => _done;
 
-  get name => _name;
+  String get name => _name == null ? "" : _name;
 
-  get notes => _notes;
+  String get notes => _notes == null ? "" : _notes;
 
   set done(bool done) => setState(() => _done = done);
 
@@ -67,14 +67,14 @@ class TaskState extends State<Task> {
 
   _taskText() {
     final nameText = Text(
-      _name,
+      name,
       style: TextStyle(
         fontSize: 16,
         decoration: _done ? TextDecoration.lineThrough : TextDecoration.none,
       ),
     );
 
-    if (notes == null || notes.isEmpty) {
+    if (notes.isEmpty) {
       return nameText;
     }
 
@@ -84,7 +84,7 @@ class TaskState extends State<Task> {
       children: <Widget>[
         nameText,
         Text(
-          _notes,
+          notes,
           style: TextStyle(
             fontSize: 14,
             color: Colors.black54,
@@ -119,11 +119,6 @@ class TaskEditScreenState extends State<TaskEditScreen> {
     widget._taskState.notes = _taskNotesController.text;
   }
 
-  void _submit(context) {
-    _saveChanges();
-    Navigator.pop(context);
-  }
-
   Future<bool> _onBackPressed() {
     if (!_unsavedChanges()) {
       var completer = Completer<bool>();
@@ -151,8 +146,8 @@ class TaskEditScreenState extends State<TaskEditScreen> {
   @override
   void initState() {
     super.initState();
-    _taskNameController.text = widget._taskState._name;
-    _taskNotesController.text = widget._taskState._notes;
+    _taskNameController.text = widget._taskState.name;
+    _taskNotesController.text = widget._taskState.notes;
   }
 
   @override
@@ -165,7 +160,10 @@ class TaskEditScreenState extends State<TaskEditScreen> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.check),
-              onPressed: () => _submit(context),
+              onPressed: () {
+                _saveChanges();
+                Navigator.pop(context);
+              },
             ),
           ],
         ),
@@ -176,14 +174,12 @@ class TaskEditScreenState extends State<TaskEditScreen> {
             children: <Widget>[
               TextField(
                 controller: _taskNameController,
-                onEditingComplete: _saveChanges,
                 decoration: InputDecoration(
                   labelText: "Task Name",
                 ),
               ),
               TextField(
                 controller: _taskNotesController,
-                onEditingComplete: _saveChanges,
                 decoration: InputDecoration(
                   labelText: "Task Notes",
                 ),
